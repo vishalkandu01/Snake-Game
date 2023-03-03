@@ -37,11 +37,8 @@ function init() {
                 food = getRandomFood();
             }
             else {
-                 
+                this.cells.pop();
             }
-
-
-            this.cells.pop();
             
             var nextX, nextY;
 
@@ -68,7 +65,7 @@ function init() {
             var last_x = Math.round(W/cs);
             var last_y = Math.round(H/cs);
 
-            if(this.cells[0].y < 0 || this.cells[0].x < 0 this.cells[0].x > last_x || this.cells[0].y > last_y) {
+            if(this.cells[0].y < 0 || this.cells[0].x < 0 || this.cells[0].x > last_x || this.cells[0].y > last_y) {
                 game_over = true;
             }
         }
@@ -110,8 +107,8 @@ function update() {
 }
 
 function getRandomFood() {
-    var foodX = Math.round(Math.random()*(W-cs)/cs);
-    var foodY = Math.round(Math.random()*(H-cs)/cs);
+    var foodX = Math.round(Math.random()*((W-cs)/cs));
+    var foodY = Math.round(Math.random()*((H-cs)/cs));
 
     var food = {
         x:foodX,
