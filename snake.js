@@ -3,6 +3,9 @@ function init() {
     W = H = canvas.width = canvas.height = 500;
     pen = canvas.getContext('2d');
     cs = 32; // cell space
+    game_over = false;
+
+    food = getRandomFood()
 
     snake = {
         init_len:5,
@@ -24,12 +27,22 @@ function init() {
         },
 
         updateSnake:function(){
-            console.log("updating snake according to the direction property");
+            // console.log("updating snake according to the direction property");
+            // check if the snake has eaten food, increase the length of the snake and gneerate new food object
+            var headX = this.cells[0].x;
+            var headY = this.cells[0].y;
+
+            if(headX == food.x && headY == food.y) {
+                console.log("Food eaten");
+                food = getRandomFood();
+            }
+            else {
+                 
+            }
 
 
             this.cells.pop();
-            var headX = this.cells[0].x;
-            var headY = this.cells[0].y;
+            
             var nextX, nextY;
 
             if(this.direction == "right") {
@@ -50,9 +63,16 @@ function init() {
             }
 
             this.cells.unshift({x:nextX, y:nextY});
+            
+            /*Write a Logic that prevents snake from going out*/
+            var last_x = Math.round(W/cs);
+            var last_y = Math.round(H/cs);
+
+            if(this.cells[0].y < 0 || this.cells[0].x < 0 this.cells[0].x > last_x || this.cells[0].y > last_y) {
+                game_over = true;
+            }
         }
 
-        /*Write a Logic that prevents snake from going out*/
     };
 
     snake.createSnake();
@@ -78,19 +98,38 @@ function init() {
 }
 
 function draw() {
-    pen.clearRect(0,0,W,H) //erase the old frame
-    snake.drawSnake()
+    pen.clearRect(0,0,W,H); //erase the old frame
+    snake.drawSnake();
+
+    pen.fillStyle = food.color;
+    pen.fillRect(food.x*cs, food.y*cs, cs, cs); // we are creating a food;
 }
 
 function update() {
     snake.updateSnake();
 }
 
+function getRandomFood() {
+    var foodX = Math.round(Math.random()*(W-cs)/cs);
+    var foodY = Math.round(Math.random()*(H-cs)/cs);
+
+    var food = {
+        x:foodX,
+        y:foodY,
+        color:"red",
+    }
+    return food;
+}
+
 function gameloop() {
+    if(game_over == true) {
+        clearInterval(f);
+        alert("Game Over");
+    }
     draw();
     update();
 }
 
 init();
 
-// var f = setInterval(gameloop, 100);
+var f = setInterval(gameloop, 100);
